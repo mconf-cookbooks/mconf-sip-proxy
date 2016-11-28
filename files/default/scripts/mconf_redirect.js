@@ -78,11 +78,8 @@ function registerEvent(meeting) {
 	var fs_version = apiExecute("version", "short").replace("\n", "");
 
 	var sip_proxy_token = "";
-	if (sip_proxy_version != "" || sip_proxy_commit != "") {
+	if (sip_proxy_version != "") {
 		sip_proxy_token = " MconfSipProxy/" + sip_proxy_version;
-		if (sip_proxy_commit != "") {
-			sip_proxy_token += "@" + sip_proxy_commit;
-		}
 	}
 
 	var ua = sip_user_agent + sip_proxy_token + " FreeSWITCH/" + fs_version;

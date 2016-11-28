@@ -1,6 +1,7 @@
 default[:freeswitch][:group] = "daemon"
 default[:freeswitch][:install_method] = "source"
 default[:freeswitch][:source][:origin] = "git"
+default[:freeswitch][:source][:git_uri] = "https://freeswitch.org/stash/scm/fs/freeswitch.git"
 default[:freeswitch][:source][:git_branch] = "v1.5.11"
 
 # these are the default enabled modules of freeswitch
@@ -92,13 +93,13 @@ default['freeswitch']['autoload_modules'] = %w[
   mod_say_en
 ]
 
-# TODO replace /home/mconf/chef-recipes by a dynamic path
-commit_hash = %x( git --git-dir /home/mconf/chef-recipes/.git rev-parse --short HEAD -- cookbooks/mconf-sip-proxy/ )
-commit_hash = commit_hash.gsub("\n", "")
+run_context.cookbook_collection.each do |key, cookbook|
+  if cookbook.name == "mconf-sip-proxy"
+    default[:freeswitch][:mconf_proxy][:version] = cookbook.version
+  end
+end
 
 default[:freeswitch][:mconf_proxy][:default_int_code] = "BR"
 default[:freeswitch][:mconf_proxy][:server_url] = ""
 default[:freeswitch][:mconf_proxy][:server_salt] = ""
-default[:freeswitch][:mconf_proxy][:version] = "0.1"
-default[:freeswitch][:mconf_proxy][:commit] = commit_hash
 default[:freeswitch][:mconf_proxy][:mode] = "bridge"
